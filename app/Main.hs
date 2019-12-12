@@ -1,6 +1,10 @@
 module Main where
 
-import Lib
+import Cli
 
 main :: IO ()
-main = someFunc
+main = do
+    res <- runCli
+    case res of
+        Repl -> print "repling"
+        FileInput f -> print $ "executing file: " ++ f
