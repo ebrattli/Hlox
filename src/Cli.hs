@@ -1,16 +1,18 @@
 module Cli
-    ( Input(..), runCli
-    ) where
+    ( Input(..)
+    , runCli
+    )
+where
 
 import Options.Applicative
-import Data.Semigroup ((<>))
+import Data.Semigroup ( (<>) )
 
 data Input = FileInput String | Repl
     deriving Show
 
 toInput :: Maybe String -> Input
 toInput (Just s) = FileInput s
-toInput Nothing = Repl
+toInput Nothing  = Repl
 
 fileInput :: Parser Input
 fileInput =
