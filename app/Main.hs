@@ -1,9 +1,11 @@
 module Main where
 
+import Text.Megaparsec
 import qualified Data.Text.IO as T
 
 import Cli
 import Repl
+import Lexer
 
 main :: IO ()
 main = do
@@ -12,4 +14,4 @@ main = do
         Repl -> repl
         FileInput f -> do
             src <- T.readFile f
-            print src
+            parseTest scanTokens src

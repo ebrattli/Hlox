@@ -1,36 +1,52 @@
 {-# LANGUAGE GADTs #-}
-
 module Model where
 
-data Literal
-    = Identifier String
-    | Str String
-    | Number Integer
+import Data.Text
 
-data TokenType =
+data TokenType
     -- Single char tokens
-    LeftParen | RightParen
-    | LeftBrace | RightBrace
-    | Comma | Dot
-    | Plus | Minus | SemiColon
-    | Slash | Star
+    = LeftParen
+    | RightParen
+    | LeftBrace
+    | RightBrace
+    | Comma
+    | Dot
+    | Plus
+    | Minus
+    | SemiColon
+    | Slash
+    | Star
     -- Logical operator tokens
-    | Bang | BangEquals
-    | Equal | EqualEqual
-    | Greater | GreaterEqual
-    | Less | LessEqual
+    | Bang
+    | BangEqual
+    | Equal
+    | EqualEqual
+    | Greater
+    | GreaterEqual
+    | Less
+    | LessEqual
     -- Literals
-    | Literal
+    | Identifier Text
+    | StringLiteral Text
+    | Number Double
     -- Keywords
-    | AND | OR
-    | CLASS | SUPER
-    | IF | ELSE
-    | TRUE | FALSE
-    | FOR | WHILE
-    | FUN | RETURN
-    | PRINT | THIS
-    | VAR | NIL
-    | EOF
+    | And
+    | Or
+    | Class
+    | Super
+    | If
+    | Else
+    | True'
+    | False'
+    | For
+    | While
+    | Fun
+    | Return
+    | Print
+    | This
+    | Var
+    | Nil
+    | Eof
     deriving (Show)
 
 
