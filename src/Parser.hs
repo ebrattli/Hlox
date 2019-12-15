@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Parser where
+module Parser ( parseLox ) where
 
 import Data.Void (Void)
 import Data.Text (Text, unpack)
@@ -32,11 +32,10 @@ symbol :: a -> Text -> Parser a
 symbol t s = t <$ symbol' s
 
 symbolNotFollowedBy :: a -> Char -> Char -> Parser a
-symbolNotFollowedBy t1 c1 c2 = try
-    $ lexeme
-    $ t1
-    <$ char c1
-    <* notFollowedBy (char c2)
+symbolNotFollowedBy t c1 c2 = try $ lexeme $ do
+    char c1
+    notFollowedBy (char c2)
+    pure t
 
 stringLiteral :: Parser Literal
 stringLiteral = lexeme $ do
@@ -46,8 +45,7 @@ stringLiteral = lexeme $ do
     return $ StringLiteral res
 
 numberLiteral :: Parser Literal
-numberLiteral = NumberLiteral
-    <$> lexeme ((try L.float) <|> (fromInteger <$> L.decimal))
+numberLiteral = NumberLiteral <$> lexeme ((try L.float) <|> (fromInteger <$> L.decimal))
 
 leftParen = symbol LeftParen "("
 rightParen = symbol RightParen ")"
@@ -71,8 +69,7 @@ greaterEqual = symbol GreaterEqual ">="
 slash = symbol Slash "/"
 
 identifier :: Parser Text
-identifier = lexeme $
-    takeWhile1P (Just "Identifier or keyword") isAlphaNum
+identifier = lexeme $ takeWhile1P (Just "Identifier or keyword") isAlphaNum
 
 literalIdentifier :: Parser Literal
 literalIdentifier = do
@@ -84,8 +81,7 @@ literalIdentifier = do
         a -> fail $ "Expected literal but got " ++ show a
 
 literal :: Parser Expr
-literal = Literal <$>
-    (stringLiteral <|> numberLiteral <|> literalIdentifier)
+literal = Literal <$> (stringLiteral <|> numberLiteral <|> literalIdentifier)
 
 grouping :: Parser Expr
 grouping = do
@@ -100,8 +96,7 @@ unary = do
     Unary op <$> expr
 
 expr :: Parser Expr
-expr = literal
-    <|> grouping
+expr = literal <|> grouping
 
 binop :: Parser Operator -> E.Operator Parser Expr
 binop op = E.InfixL (flip Binary <$> op)

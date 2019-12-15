@@ -19,7 +19,6 @@ fileInput =
     toInput
     <$> optional (argument str (help "tct"))
 
-
 opts = info (fileInput <**> helper) fullDesc
 
 runCli :: IO Input

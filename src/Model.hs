@@ -60,7 +60,6 @@ instance Show UnaryOperator where
     show Bang = "!"
 
 data TokenType
-    -- Single char tokens
     = LeftParen
     | RightParen
     | LeftBrace
