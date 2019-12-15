@@ -3,6 +3,13 @@ module Model where
 
 import Data.Text
 
+type LoxResult = Either String Literal
+
+showResult :: LoxResult -> String
+showResult e = case e of
+    Left s -> "Error: " ++ s
+    Right l -> show l
+
 data Expr
     = Literal Literal
     | Binary Expr Operator Expr
@@ -20,6 +27,7 @@ data Literal
     | NumberLiteral Double
     | BoolLiteral Bool
     | Nil
+    deriving (Eq, Ord)
 instance Show Literal where
     show (Identifier t) = unpack t
     show (StringLiteral t) = "\"" ++ unpack t ++ "\""

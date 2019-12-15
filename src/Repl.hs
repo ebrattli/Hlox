@@ -3,14 +3,19 @@ module Repl
     )
 where
 
+import qualified Eval as E
+
 import System.IO
 import System.Exit
+
+import Parser (parseLox)
+import Model
 
 eval :: String -> IO ()
 eval s =
     if s == "q" || s == "quit"
         then exitSuccess
-        else putStrLn s
+        else print $ (map E.eval) <$> (parseLox s)
 
 repl :: IO ()
 repl = do

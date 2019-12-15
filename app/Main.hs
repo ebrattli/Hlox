@@ -13,5 +13,5 @@ main = do
     case res of
         Repl -> repl
         FileInput f -> do
-            src <- T.readFile f
-            parseTest parseLox src
+            src <- readFile f
+            print $ parseLox src

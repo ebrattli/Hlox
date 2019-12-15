@@ -2,7 +2,7 @@
 module Parser ( parseLox ) where
 
 import Data.Void (Void)
-import Data.Text (Text, unpack)
+import Data.Text (Text, unpack, pack)
 import Data.Char (isAlphaNum)
 import Text.Megaparsec
 import Text.Megaparsec.Debug (dbg)
@@ -93,10 +93,10 @@ grouping = do
 unary :: Parser Expr
 unary = do
     op <- bang <|> unaryMinus
-    Unary op <$> expr
+    Unary op <$> term
 
-expr :: Parser Expr
-expr = literal <|> grouping
+term :: Parser Expr
+term = literal <|> grouping
 
 binop :: Parser Operator -> E.Operator Parser Expr
 binop op = E.InfixL (flip Binary <$> op)
@@ -125,10 +125,13 @@ operatorTable =
     ]
 
 pExpr :: Parser Expr
-pExpr = E.makeExprParser expr operatorTable
+pExpr = E.makeExprParser term operatorTable
 
-parseLox :: Parser [Expr]
-parseLox = many $ do
+pExpressions :: Parser [Expr]
+pExpressions = many $ do
     e <- pExpr
     semicolon
     pure e
+
+parseLox :: String -> Maybe [Expr]
+parseLox s = parseMaybe pExpressions (pack s)
