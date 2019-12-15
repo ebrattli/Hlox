@@ -26,6 +26,7 @@ dependencies:
 - megaparsec
 - containers
 - unordered-containers
+- parser-combinators
 
 library:
   source-dirs: src

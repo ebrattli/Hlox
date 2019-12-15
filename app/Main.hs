@@ -5,7 +5,7 @@ import qualified Data.Text.IO as T
 
 import Cli
 import Repl
-import Lexer
+import Parser
 
 main :: IO ()
 main = do
@@ -14,4 +14,4 @@ main = do
         Repl -> repl
         FileInput f -> do
             src <- T.readFile f
-            parseTest scanTokens src
+            parseTest parseLox src
